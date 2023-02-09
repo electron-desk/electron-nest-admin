@@ -1,7 +1,7 @@
 /*
  * @Author: 最爱白菜吖 <1355081829@qq.com>
  * @Date: 2023-02-08 16:23:05
- * @LastEditTime: 2023-02-09 20:00:40
+ * @LastEditTime: 2023-02-09 20:07:03
  * @LastEditors: 最爱白菜吖
  * @FilePath: \electron-nest-admin\electron\main.ts
  * @QQ: 大前端QQ交流群: 473246571
@@ -30,7 +30,9 @@ const isMac = process.platform === 'darwin';
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 let mainWindow: BrowserWindow;
 let nestServer: ChildProcess;
-
+const setting = {
+  quit: false,
+};
 function createServer() {
   nestServer = fork(resolve(__dirname, '..', 'server/main.js'), [
     '--subprocess',
@@ -93,6 +95,7 @@ const createTray = () => {
     {
       label: '退出',
       click: () => {
+        setting.quit = true;
         if (process.platform !== 'darwin') {
           app.quit();
         } else {
@@ -101,8 +104,8 @@ const createTray = () => {
       },
     },
   ]);
-  tray.setToolTip('codedesktop\n开放API');
-  tray.setTitle('codedesktop');
+  tray.setToolTip('微信：hanyunmuyu');
+  tray.setTitle('electron-nest-admin');
   tray.on('click', () => {
     mainWindow.show();
   });
@@ -153,14 +156,25 @@ function createWindow() {
   } else {
     mainWindow.loadURL(`file://${join(__dirname, '..', 'view', 'index.html')}`);
   }
+  if (app.isPackaged) {
+    mainWindow.on('close', function (e: Event) {
+      if (!setting.quit) {
+        e.preventDefault();
+        mainWindow.hide();
+      } else {
+        mainWindow = null;
+        app.quit();
+      }
+    });
+  }
+}
+if (app.isPackaged) {
+  createServer();
 }
 app.whenReady().then(() => {
   createTray();
   createMenu();
   createWindow();
-  if (app.isPackaged) {
-    createServer();
-  }
   if (process.env.NODE_ENV === 'building') {
     encryptFile();
   }
