@@ -15,13 +15,6 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true
   },
-  "include": [
-    "view/**/*.ts",
-    "view/**/*.d.ts",
-    "view/**/*.tsx",
-    "view/**/*.vue",
-    "vite.config.ts",
-    "plugin/main.ts"
-  ],
+  "include": ["view", "plugin/main.ts"],
   "types": ["vite/client"]
 }
