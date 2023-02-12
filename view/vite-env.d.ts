@@ -10,8 +10,3 @@
  * Copyright (c) 2022 by 武汉跃码教育, All Rights Reserved.
  */
 /// <reference types="vite/client" />
-declare module '*.vue' {
-  import { ComponentOptions } from 'vue';
-  const componentOptions: ComponentOptions;
-  export default componentOptions;
-}

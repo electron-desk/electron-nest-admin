@@ -1,9 +1,9 @@
 /*
  * @Author: 最爱白菜吖 <1355081829@qq.com>
  * @Date: 2023-02-08 12:54:50
- * @LastEditTime: 2023-02-08 18:00:19
+ * @LastEditTime: 2023-02-09 23:02:01
  * @LastEditors: 最爱白菜吖
- * @FilePath: \electron-nest-vue\plugin\main.ts
+ * @FilePath: /electron-nest-admin/plugin/main.ts
  * @QQ: 大前端QQ交流群: 473246571
  * @公众账号: 乐编码
  * 惑而不从师，其为惑也，终不解矣
@@ -16,6 +16,7 @@ import { spawn } from 'child_process';
 import { resolve, join } from 'path';
 import { builtinModules } from 'module';
 import fs from 'fs';
+import { log } from 'console';
 async function buildElectron() {
   await build({
     root: resolve(__dirname, '..', 'dist'), // 指向主进程目录
@@ -106,7 +107,9 @@ export default (): Plugin => {
         },
       );
       electronProcess.on('message', (msg) => {
-        electronProcess.kill();
+        // 杀死加密进程
+        log(msg);
+        electronProcess.kill(9);
         spawn('electron-builder', {
           stdio: 'inherit',
           shell: true,
